@@ -16,6 +16,8 @@ public class RemoveHealth : MonoBehaviour
         
     }
 
+
+
     public int Damage(string EnemyType)
     {
         switch (EnemyType)

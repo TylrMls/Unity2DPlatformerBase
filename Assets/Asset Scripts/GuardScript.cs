@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GuardScript : MonoBehaviour
 {
+    public int PlayerHealth = 5;
 
     [SerializeField] float speed = 1.0f;
     [SerializeField] float jumpForce = 4.0f;
@@ -13,12 +14,15 @@ public class GuardScript : MonoBehaviour
     private Rigidbody2D body2d;
     private Animator fade;
     public Vector3 oldplayerpos;
+    public DamageSender damagesender;
     private bool combatIdle = false;
     private bool isGrounded = true;
     private bool HasBegun = false;
-    private int AttackDamage = 2;
+    public float attackDistance = 0.1f;
+    public int AttackDamage = 2;
     private int DamageTaken = 0;
-    private int PlayerHealth = 5;
+    public bool isLookingLeft;
+    
 
     // Use this for initialization
     void Start()
@@ -58,10 +62,12 @@ public class GuardScript : MonoBehaviour
             // Swap direction of sprite depending on walk direction
             if (inputX > 0)
             {
+                isLookingLeft = true;
                 transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
             }
             else if (inputX < 0)
             {
+                isLookingLeft = false;
                 transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             }
 
@@ -122,5 +128,9 @@ public class GuardScript : MonoBehaviour
         DamageTaken = RmvHlth.Damage(Enemy);
         PlayerHealth = PlayerHealth - DamageTaken;
         animator.SetTrigger("Hurt");
+    }
+    private void DealDamage()
+    {
+        damagesender.HitDamage(AttackDamage);
     }
 }
